@@ -1,4 +1,3 @@
-
 class MapboxField {
   /**
    * @param {jQuery} $container
@@ -22,8 +21,8 @@ class MapboxField {
    */
   _getLngLatValue() {
     return [
-        this._getLngField().val(),
-        this._getLatField().val()
+      this._getLngField().val(),
+      this._getLatField().val()
     ]
   }
 
@@ -41,7 +40,7 @@ class MapboxField {
    * @private
    */
   _getLngField() {
-    return this.$container.find('input[data-mapbox-field="Longitude"]');
+    return this.$container.find('input[data-mapbox-field="Longtitude"]');
   }
 
   /**
@@ -49,7 +48,7 @@ class MapboxField {
    * @private
    */
   _getLatField() {
-    return this.$container.find('input[data-mapbox-field="Latitude"]');
+    return this.$container.find('input[data-mapbox-field="Lattitude"]');
   }
 
   /**
@@ -65,16 +64,16 @@ class MapboxField {
     const map = new mapboxgl.Map({
       center: this._getLngLatValue(),
       container: this.$container.find('.mapbox__map').get(0),
-      style: 'mapbox://styles/mapbox/basic-v9',
-      zoom: 15
+      style: this.$container.data('style') ? this.$container.data('style') : 'mapbox://styles/mapbox/basic-v9',
+      zoom: 15,
     });
 
     // Add marker
     const marker = new mapboxgl.Marker({
-        draggable: true
+        draggable: true,
       })
-        .setLngLat(this._getLngLatValue())
-        .addTo(map);
+      .setLngLat(this._getLngLatValue())
+      .addTo(map);
 
     // Udpdate the coordinates after dragging marker
     marker.on('dragend', () => {
@@ -105,6 +104,7 @@ class MapboxField {
   _onMarkerUpdate(marker) {
     const lngLat = marker.getLngLat();
     this._setLngLatValue([lngLat.lng, lngLat.lat]);
+    this.$container.parents('form').find('input[name="LatLngOverride"]').prop('checked', true);
   }
 }
 
